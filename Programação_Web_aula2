@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Simples</title>
+</head>
+<body>
+    <h1>Bem-vindo ao Mercado</h1>
+    <div style="display: flex; gap: 25px;">
+        <div>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5wmTVYNuavgHYV0-40HF_3VHjZeX0IVQOcQ&s" alt="Banana">
+            <p>Banana - R$ 2,00</p>
+            <button>Comprar</button>
+        </div>
+        <div>
+            <img src="https://viverbem.unimed.coop.br/wp-content/uploads/2023/02/86-beneficios-da-maca.jpg" alt="Maçã">
+            <p>Maçã - R$ 3,00</p>
+            <button>Comprar</button>
+        </div>
+    </div>
+</body>
+</html>
