@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokédex Completa</title>
+  <link rel="stylesheet" href="pokedex.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f00;
+      font-family: sans-serif;
+    }
+    li:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="pokedex">
+    <div id="left">
+      <div id="logo"></div>
+      <div id="bg_curve1_left"></div>
+      <div id="bg_curve2_left"></div>
+      <div id="curve1_left">
+        <div id="buttonGlass">
+          <div id="reflect"></div>
+        </div>
+        <div id="miniButtonGlass1"></div>
+        <div id="miniButtonGlass2"></div>
+        <div id="miniButtonGlass3"></div>
+      </div>
+      <div id="curve2_left">
+        <div id="junction">
+          <div id="junction1"></div>
+          <div id="junction2"></div>
+        </div>
+      </div>
+
+      <div style="padding: 10px;">
+        <!-- Campo de busca de Pokémon pelo nome. Ao pressionar Enter, dispara a função showPokemon passando o nome em letras minúsculas. -->
+        <input type="text" id="searchInput" placeholder="Buscar Pokémon..." style="width: 90%; padding: 5px;" onkeypress="if(event.key==='Enter') showPokemon(this.value.toLowerCase())">
+      </div>
+
+      <div id="pokemonList" style="margin: 10px 0; padding: 10px; color: white;">
+        <h3 style="color: white;">Lista de Pokémons:</h3>
+        <!-- Esta lista contém 10 Pokémons fixos. Ao clicar em um nome, a função showPokemon é chamada para buscar e exibir os dados do Pokémon na tela. -->
+        <ul id="list" style="list-style: none; padding: 0; cursor: pointer;">
+          <li onclick="showPokemon('pikachu')">Pikachu</li>
+          <li onclick="showPokemon('bulbasaur')">Bulbasaur</li>
+          <li onclick="showPokemon('charmander')">Charmander</li>
+          <li onclick="showPokemon('squirtle')">Squirtle</li>
+          <li onclick="showPokemon('eevee')">Eevee</li>
+          <li onclick="showPokemon('snorlax')">Snorlax</li>
+          <li onclick="showPokemon('meowth')">Meowth</li>
+          <li onclick="showPokemon('psyduck')">Psyduck</li>
+          <li onclick="showPokemon('jigglypuff')">Jigglypuff</li>
+          <li onclick="showPokemon('gengar')">Gengar</li>
+        </ul>
+      </div>
+
+      <div id="screen">
+        <div id="topPicture">
+          <div id="buttontopPicture1"></div>
+          <div id="buttontopPicture2"></div>
+        </div>
+        <div id="picture">
+          <img id="pokemonImage" title="Click e altere imagem" height="170"/>
+        </div>
+        <div id="buttonbottomPicture"></div>
+        <div id="speakers">
+          <div class="sp"></div>
+          <div class="sp"></div>
+          <div class="sp"></div>
+          <div class="sp"></div>
+        </div>
+      </div>
+      <div id="bigbluebutton"></div>
+      <div id="barbutton1"></div>
+      <div id="barbutton2"></div>
+      <div id="cross">
+        <div id="leftcross">
+          <div id="leftT"></div>
+        </div>
+        <div id="topcross">
+          <div id="upT"></div>
+        </div>
+        <div id="rightcross">
+          <div id="rightT"></div>
+        </div>
+        <div id="midcross">
+          <div id="midCircle"></div>
+        </div>
+        <div id="botcross">
+          <div id="downT"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="right">
+      <!-- Essa seção exibe os dados do Pokémon selecionado, como nome, tipo, altura, peso e habilidades. Os valores são preenchidos dinamicamente via JavaScript ao clicar em um Pokémon ou usar a busca. -->
+      <div id="stats">
+        <strong>Name:</strong> <span id="pokemonName"></span><br />
+        <strong>Type:</strong> <span id="pokemonTypes"></span><br />
+        <strong>Height:</strong> <span id="pokemonHeight"></span> m<br />
+        <strong>Weight:</strong> <span id="pokemonWeight"></span> kg<br />
+        <strong>Skill:</strong> <span id="pokemonSkills"></span><br />
+      </div>
+
+      <!-- Este é um template visual no estilo WhatsApp que mostra uma mensagem com o nome e habilidades de um Pokémon, ideal para explicar visualmente os dados de forma criativa. -->
+      <div style="background-color:#e5ffda; border-radius:10px; padding:10px; margin:10px;">
+        <div style="background-color:#dcf8c6; padding:10px; border-radius:7px; max-width: 250px; margin-bottom:5px;">
+          <strong>Pikachu:</strong> Static, Lightning Rod ⚡
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Essa função é responsável por buscar os dados do Pokémon na API PokeAPI e atualizar a interface com os dados recebidos, incluindo nome, tipo, altura, peso, habilidades, imagem e evolução.
+    async function showPokemon(name) {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const data = await response.json();
+
+        document.getElementById('pokemonName').textContent = data.name;
+        document.getElementById('pokemonTypes').textContent = data.types.map(t => t.type.name).join(', ');
+        document.getElementById('pokemonHeight').textContent = (data.height / 10).toFixed(1);
+        document.getElementById('pokemonWeight').textContent = (data.weight / 10).toFixed(1);
+        document.getElementById('pokemonSkills').textContent = data.abilities.map(a => a.ability.name).join(', ');
+        document.getElementById('pokemonImage').src = data.sprites.front_default;
+
+        const speciesRes = await fetch(data.species.url);
+        const speciesData = await speciesRes.json();
+        let evolution = 'N/A';
+        if (speciesData.evolves_from_species) {
+          evolution = speciesData.evolves_from_species.name;
+        }
+        if (!document.getElementById('evolutionInfo')) {
+          const evo = document.createElement('p');
+          evo.id = 'evolutionInfo';
+          evo.innerHTML = '<strong>Próxima Evolução:</strong> <span id="pokemonEvolve"></span>';
+          document.getElementById('stats').appendChild(evo);
+        }
+        document.getElementById('pokemonEvolve').textContent = evolution;
+      } catch (error) {
+        alert('Pokémon não encontrado.');
+      }
+    }
+  </script>
+</body>
+</html>
